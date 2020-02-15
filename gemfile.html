@@ -1,0 +1,89 @@
+---
+title: Gemfile
+permalink: /Gemfile/
+---
+<html>
+<body>
+<div id="root"></div>
+<script>
+const pagesHtml = async () => {
+  try {
+    const resp = await fetch('https://pages.github.com/versions/index.html');
+    if (!resp.ok) {
+      return null;
+    }
+    
+    return resp.text();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+const parseGems = async (html) => {
+  const gems = {};
+  const htmlEl = document.createElement('html');
+  htmlEl.innerHTML = html;
+  htmlEl.querySelectorAll('table tr').forEach((gemEl) => {
+    const gemNameEl = gemEl.querySelector('.gem a');
+    const versionEl = gemEl.querySelector('.version');
+    if (!gemNameEl || !versionEl) {
+      return;
+    }
+    const gemName = gemNameEl.innerText.trim();
+    if (!/^jekyll-theme/.test(gemName) && gemName !== 'ruby') {
+      gems[gemNameEl.innerText] = versionEl.innerText;
+    }
+  });
+  return gems;
+};
+
+
+const generateContent = (gems) => {
+  const pluginList = Object.keys(gems)
+    .filter(key => /^jekyll-/.test(key))
+    .map(key => `gem '${key}', '${gems[key]}'`)
+    .join('<br />&nbsp&nbsp');
+  const libList = Object.keys(gems)
+    .filter(key => !/^jekyll-/.test(key))
+    .map(key => `gem '${key}', '${gems[key]}'`)
+    .join('<br />');
+  
+  return `# https://pages.github.com/versions/index.html
+<br />
+# https://mpan-wework.github.io/interview-essentials/Gemfile/
+<br />
+source 'https://rubygems.org'
+<br />
+<br />
+install_if -> { RUBY_PLATFORM =~ %r!mingw|mswin|java! } do
+<br />
+&nbsp&nbspgem "tzinfo", "~&gt; 1.2"
+<br />
+&nbsp&nbspgem "tzinfo-data"
+<br />
+end
+<br />
+<br />
+group :jekyll_plugins do
+<br />
+&nbsp&nbspgem 'github-pages', '${gems['github-pages']}'
+<br />
+&nbsp&nbsp${pluginList}
+<br />
+end
+<br />
+<br />
+${libList}`;
+};
+
+Promise.resolve()
+  .then(pagesHtml)
+  .then(parseGems)
+  .then(generateContent)
+  .then((innerHTML) => {
+  document.getElementById('root').innerHTML = innerHTML;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+version: '3'
+services:
+  jekyll-app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - '4001:12239'
+    volumes:
+      - ./_posts:/jekyll-app/_posts
+      - ./_layouts:/jekyll-app/_layouts
+      - ./_config.yml:/jekyll-app/_config.yml
+    working_dir: /jekyll-app
+    command: /bin/sh -c "bundle exec jekyll serve --port 12239"

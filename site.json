@@ -1,0 +1,11 @@
+---
+layout: null
+---
+{
+"baseurl":"{{ '/' | absolute_url }}","posts":[
+{% for post in site.posts %}
+{"title":"{{ post.title | escape }}","category":"{{ post.category }}","tags":"{{ post.tags | join: ',' }}","url":"{{ post.url }}","absolute_url":"{{ post.url | absolute_url }}","date":"{{ post.date | date_to_xmlschema }}","content":{{ post.content | markdownify | jsonify }}}
+{% unless forloop.last %},{% endunless %}
+{% endfor %}
+]
+}
