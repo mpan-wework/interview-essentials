@@ -1,0 +1,10 @@
+- name: Dummy React
+  key: dummy-react
+  npm: https://unpkg.com/@mpan-wework/jekyll-theme-dummy-react
+  js: dist/static/js/main.js
+  css: dist/static/css/main.css
+- name: Dummy Vue
+  key: dummy-vue
+  npm: https://unpkg.com/@mpan-wework/jekyll-theme-dummy-vue
+  js: dist/js/app.js
+  css: dist/css/app.css

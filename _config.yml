@@ -13,20 +13,25 @@ plugins:
   - jekyll-sitemap
   - jemoji
   - jekyll-remote-theme
-# remote_theme:
+remote_theme: mpan-wework/jekyll-theme-dummy
 
+include:
+  - _redirects
 exclude:
-  - .sass-cache/
+  - .bundle/
   - .jekyll-cache/
+  - .sass-cache/
+  - docker-compose.yml
+  - Dockerfile
   - gemfiles/
   - Gemfile
   - Gemfile.lock
   - node_modules/
+  - README.md
   - vendor/bundle/
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
-  - .bundle/
 timezone: Asia/Shanghai
 host: '0.0.0.0'
 defaults:
