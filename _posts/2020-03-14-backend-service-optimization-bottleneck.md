@@ -1,7 +1,7 @@
 ---
 title:  "Backend Service Optimization Bottleneck"
 date:   "2020-03-14 00:00:00+08:00"
-categories: database
+tags: [backend, database]
 pull_request_id: 1
 ---
 
