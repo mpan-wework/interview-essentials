@@ -20,6 +20,20 @@ const pagesHtml = async () => {
   }
 };
 
+const pagesJson = async () => {
+  try {
+    const resp = await fetch('https://pages.github.com/versions.json');
+    if (!resp.ok) {
+      return {};
+    }
+
+    return resp.json();
+  } catch (error) {
+    console.error(error);
+    return {};
+  }
+};
+
 const parseGems = async (html) => {
   const gems = {};
   const htmlEl = document.createElement('html');
@@ -30,22 +44,32 @@ const parseGems = async (html) => {
     if (!gemNameEl || !versionEl) {
       return;
     }
-    const gemName = gemNameEl.innerText.trim();
-    if (!/^jekyll-theme/.test(gemName) && gemName !== 'ruby') {
-      gems[gemNameEl.innerText] = versionEl.innerText;
-    }
+    gems[gemNameEl.innerText.trim()] = versionEl.innerText;
   });
   return gems;
 };
 
+const filterGems = async (gems) => {
+  return Object.keys(gems).reduce((acc, gemName) => {
+    if (/^jekyll-theme/.test(gemName) || gemName === 'ruby') {
+      return { ...acc };
+    }
+    return {
+      ...acc,
+      [gemName]: gems[gemName],
+    };
+  }, {});
+};
 
 const generateContent = (gems) => {
   const pluginList = Object.keys(gems)
     .filter(key => /^jekyll-/.test(key))
+    .sort()
     .map(key => `gem '${key}', '${gems[key]}'`)
     .join('<br />&nbsp&nbsp');
   const libList = Object.keys(gems)
     .filter(key => !/^jekyll-/.test(key))
+    .sort()
     .map(key => `gem '${key}', '${gems[key]}'`)
     .join('<br />');
   
@@ -67,8 +91,6 @@ end
 <br />
 group :jekyll_plugins do
 <br />
-&nbsp&nbspgem 'github-pages', '${gems['github-pages']}'
-<br />
 &nbsp&nbsp${pluginList}
 <br />
 end
@@ -78,8 +100,10 @@ ${libList}`;
 };
 
 Promise.resolve()
-  .then(pagesHtml)
-  .then(parseGems)
+//  .then(pagesHtml)
+//  .then(parseGems)
+  .then(pagesJson)
+  .then(filterGems)
   .then(generateContent)
   .then((innerHTML) => {
   document.getElementById('root').innerHTML = innerHTML;
