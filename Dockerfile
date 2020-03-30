@@ -1,4 +1,4 @@
-FROM ruby:2.5.3-alpine
+FROM ruby:2.7.0-alpine3.11
 RUN apk add --update build-base
 WORKDIR /jekyll-app
 COPY Gemfile ./
