@@ -3,7 +3,7 @@ layout: null
 ---
 {"baseurl":{{ '/' | absolute_url | jsonify }},
 "disqus":{{ site.data.site.disqus | jsonify }},
-"github":{"build_revision":{{ site.github.build_revision || jsonify }},"repository_nwo":{{ site.github.repository_nwo | jsonify }},"repository_url":{{ site.github.repository_url || jsonify }}},
+"github":{"build_revision":{{ site.github.build_revision | jsonify }},"repository_nwo":{{ site.github.repository_nwo | jsonify }},"repository_url":{{ site.github.repository_url | jsonify }}},
 "posts":[
 {% for post in site.posts %}
 {"title":{{ post.title | escape | jsonify }},"tags":{{ post.tags | jsonify }},"url":{{ post.url | jsonify }},"absolute_url":{{ post.url | absolute_url | jsonify }},"date":{{ post.date | date_to_xmlschema | jsonify }},"pull_request_id":{{ post.pull_request_id | default: nil | jsonify }}}

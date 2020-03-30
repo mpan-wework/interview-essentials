@@ -4,6 +4,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   Interview Essentials
 baseurl: /interview-essentials
 url: https://mpan-wework.github.io
+repository: mpan-wework/interview-essentials
 permalink: /posts/:year/:month/:day/:title
 plugins:
   - jekyll-avatar
