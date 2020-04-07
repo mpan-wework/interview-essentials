@@ -5,7 +5,96 @@ tags: [frontend, javascript]
 pull_request_id: 4
 ---
 
-> English version can be found after Chinese one.
+> 中文版在英文版之后。
+
+# NPM Publish Reference
+
+Talking over `NPM Publish`, it is unavoidable to go through the long evolution history of `CommonJS` and `AMD` into `UMD` and finally `ES Module`. However, we choose to leave it to further reading in References.
+
+In short, we are supposed to publish `ES Module` stated in `module` field, for those projects able to recognize `ES Module`; for other projects unable to do so, we are supposed to publish `CommonJS` stated in `main`; if we have browser support requirements, we are supposed to publish `UMD` instead of `CommonJS` or side by side.
+
+## Published directories
+
+Here we provide a list of well-known javascript/typescript projects on Github, let's take a look how they publish npm packages:
+
+1. `redux`:
+    - adopts `Rollup`;
+    - inside repository, places source code under `src` with nothing else published;
+    - inside `npm`, publishes:
+      - `src`;
+      - `lib` (uncompressed `CommonJS`, pointed by `main`);
+      - `es` (uncompressed and compressed `ES Module`, pointed by `module`);
+      - `dist` (uncompressed and compressed `UMD`, pointed by `unpkg`);
+1. `react-use`:
+    - adopts `tsc`;
+    - inside repository, places source code under `src` with nothing else published;
+    - inside `npm`, publishes:
+      - `lib` (uncompressed `CommonJS`, pointed by `main`);
+      - `esm` (uncompressed `ES Module`, pointed by `module`);
+1. `vue`:
+    - adopts `Rollup`;
+    - inside repository, places source code under `src`, along with `dist` published;
+    - inside `npm`, publishes:
+      - `src`;
+      - `dist` (containing uncompressed and compressed `CommonJS`, uncompressed and compressed `ES Module` and uncompressed and compressed `UMD`), with `main` pointing at `CommonJS`, `module` pointing at `ES Module` and `unpkg` and `jsdelivr` pointing at `UMD`;
+1. `react`:
+    - adopts `Rollup`;
+    - inside repository, places sources code under `src` of MonoRepo, with nothing else published;
+    - inside `npm`, publishes:
+      - `cjs` (uncompressed and compressed `CommonJS`, pointed by `main`);
+      - `umd` (uncompressed and compressed `UMD`);
+1. `angular`:
+    - adopts internal tools;
+    - inside repository, places source code under `src` of MonoRepo, with nothing else published;
+    - inside `npm`, publishes:
+      - `bundles` (uncompressed and compressed `UMD`, pointed by `main`);
+      - various versions of `ES Module` (`esm` vs. `fesm`, `ES5` vs. `ES2015`, `module` pointing at `fesm5`);
+1. `react-router`:
+    - adopts `Rollup`;
+    - inside repository, places source code under `modules` of MonoRepo, with nothing else published;
+    - inside `npm`, publishes:
+      - `cjs` (uncompressed and compressed `CommonJS`, pointed by `main`);
+      - `esm` (uncompressed `ES Module`, pointed by `module`);
+      - `umd` (uncompressed and compressed `UMD`);
+1. `axios`:
+    - adopts `Webpack`;
+    - inside repository, places source code under `lib`, along with `dist` published;
+    - inside `npm`, publishes:
+      - `lib`;
+      - `dist` (uncompressed and compressed `UMD`, pointed by `main`);
+1. `material-ui`:
+    - adopts `Rollup` for `UMD` and `Babel` for `CommonJS` and `ES Module`;
+    - inside repository, places source code under `src` of MonoRepo, with nothing else published;
+    - inside `npm`, publishes:
+      - root directory (uncompressed `CommonJS`, pointed by `main`);
+      - `es` (uncompressed `ES Module`);
+      - `esm` (uncompressed `ES Module` of `ES5`, pointed by `module`);
+      - `umd` (uncompressed and compressed `UMD`);
+1. `antd`:
+    - adopts `Webpack`;
+    - inside repository, places source code under `components`, with nothing else published;
+    - inside `npm`, publishes:
+      - `lib` (uncompressed `CommonJS`, pointed by `main`);
+      - `es` (uncompressed `ES Module`, pointed by `module`);
+      - `dist` (uncompressed and compressed `UMD`, pointed by `unpkg`);
+1. `element-ui`:
+    - adopts `Webpack`;
+    - inside repository, places source code under `src` and `packages`, with nothing else published;
+    - inside `npm`, publishes:
+      - `lib` (single-file and multiple-file `CommonJS`, compressed `UMD`, `main` pointing at `CommonJS`).
+
+`unpkg` links of above mentioned projects can be found in References and `package.json` has field `repository` for repository info.
+
+## Recommendation
+
+1. Adopt `Rollup`, for fast compilation, smaller bundle size and clean and straightforward configuration and workflow;
+1. Place source code under `src` or `src` of MonoRepo;
+1. Publish `UMD`、`CommonJS` 和 `ES Module` in separate directories, or in directories with common conventions (e.g. `lib` for `CommonJS` and `dist` for `UMD`);
+1. Publish both uncompressed and compressed `UMD` (for development and production purpose);
+1. Publish both uncompressed and compressed `ES Module` since popular browsers are powerful and smark enough;
+1. Point `main` at `CommonJS` or `UMD` and `module` at `ES Module` in `package.json`.
+
+BTW, `typescript` projects will also publish `.d.ts` files, which can benefit target users as well as IDEs a lot. Alternatively, you can write your own type definition files.
 
 # NPM 发布参考
 
@@ -94,94 +183,7 @@ pull_request_id: 4
 1. `ES Module` 最好也提供压缩版本，供浏览器使用；
 1. `package.json` 的 `main` 指向 `CommonJS` 或 `UMD`， `module` 指向 `ES Module`。
 
-另外说一下，`typescript` 的项目会发布 `.d.ts` 的文件，可以给 IDE 以及开发者提供便利。
-
-# NPM Publish Reference
-
-Talking over `NPM Publish`, the long evolution history of `CommonJS` and `AMD` into `UMD` and finally `ES Module` is unavoidable. However, we choose to leave it to further reading in References.
-
-In short, we are supposed to publish `ES Module` stated in `module` field, for those project able to recognize `ES Module`; for other projects unable to do so, we are supposed to publish `CommonJS` stated in `main`; if we have browser support requirements, we are supposed to publish `UMD` instead of `CommonJS` or side by side.
-
-## Published directories
-
-Here we provide a list of well-known javascript/typescript projects on Github, let's take a look how they publish npm packages:
-
-1. `redux`:
-    - adopts `Rollup`;
-    - inside repository, places source code under `src` with nothing else published;
-    - inside `npm`, publishes:
-      - `src`;
-      - `lib` (uncompressed `CommonJS`, pointed by `main`);
-      - `es` (uncompressed and compressed `ES Module`, pointed by `module`);
-      - `dist` (uncompressed and compressed `UMD`, pointed by `unpkg`);
-1. `react-use`:
-    - adopts `tsc`;
-    - inside repository, places source code under `src` with nothing else published;
-    - inside `npm`, publishes:
-      - `lib` (uncompressed `CommonJS`, pointed by `main`);
-      - `esm` (uncompressed `ES Module`, pointed by `module`);
-1. `vue`:
-    - adopts `Rollup`;
-    - inside repository, places source code under `src`, along with `dist` published;
-    - inside `npm`, publishes:
-      - `src`;
-      - `dist` (containing uncompressed and compressed `CommonJS`, uncompressed and compressed `ES Module` and uncompressed and compressed `UMD`), with `main` pointing at `CommonJS`, `module` pointing at `ES Module` and `unpkg` and `jsdelivr` pointing at `UMD`;
-1. `react`:
-    - adopts `Rollup`;
-    - inside repository, places sources code under `src` of MonoRepo, with nothing else published;
-    - inside `npm`, publishes:
-      - `cjs` (uncompressed and compressed `CommonJS`, pointed by `main`);
-      - `umd` (uncompressed and compressed `UMD`);
-1. `angular`:
-    - adopts internal tools;
-    - inside repository, places source code under `src` of MonoRepo, with nothing else published;
-    - inside `npm`, publishes:
-      - `bundles` (uncompressed and compressed `UMD`, pointed by `main`);
-      - various versions of `ES Module` (`esm` vs. `fesm`, `ES5` vs. `ES2015`, `module` pointing at `fesm5`);
-1. `react-router`:
-    - adopts `Rollup`;
-    - inside repository, places source code under `modules` of MonoRepo, with nothing else published;
-    - inside `npm`, publishes:
-      - `cjs` (uncompressed and compressed `CommonJS`, pointed by `main`);
-      - `esm` (uncompressed `ES Module`, pointed by `module`);
-      - `umd` (uncompressed and compressed `UMD`);
-1. `axios`:
-    - adopts `Webpack`;
-    - inside repository, places source code under `lib`, along with `dist` published;
-    - inside `npm`, publishes:
-      - `lib`;
-      - `dist` (uncompressed and compressed `UMD`, pointed by `main`);
-1. `material-ui`:
-    - adopts `Rollup` for `UMD` and `Babel` for `CommonJS` and `ES Module`;
-    - inside repository, places source code under `src` of MonoRepo, with nothing else published;
-    - inside `npm`, publishes:
-      - root directory (uncompressed `CommonJS`, pointed by `main`);
-      - `es` (uncompressed `ES Module`);
-      - `esm` (uncompressed `ES Module` of `ES5`, pointed by `module`);
-      - `umd` (uncompressed and compressed `UMD`);
-1. `antd`:
-    - adopts `Webpack`;
-    - inside repository, places source code under `components`, with nothing else published;
-    - inside `npm`, publishes:
-      - `lib` (uncompressed `CommonJS`, pointed by `main`);
-      - `es` (uncompressed `ES Module`, pointed by `module`);
-      - `dist` (uncompressed and compressed `UMD`, pointed by `unpkg`);
-1. `element-ui`:
-    - adopts `Webpack`;
-    - inside repository, places source code under `src` and `packages`, with nothing else published;
-    - inside `npm`, publishes:
-      - `lib` (single-file and multiple-file `CommonJS`, compressed `UMD`, `main` pointing at `CommonJS`).
-
-`unpkg` links of above mentioned projects can be found in References and `package.json` has field `repository` for repository info.
-
-## Recommendation
-
-1. Adopt `Rollup`, for fast compilation, smaller bundle size and clean and straightforward configuration and workflow;
-1. Place source code under `src` or `src` of MonoRepo;
-1. Publish `UMD`、`CommonJS` 和 `ES Module` in separate directories, or in directories with common conventions (e.g. `lib` for `CommonJS` and `dist` for `UMD`);
-1. Publish both uncompressed and compressed `UMD` (for development and production purpose);
-1. Publish both uncompressed and compressed `ES Module` since popular browsers are powerful and smark enough;
-1. Point `main` at `CommonJS` or `UMD` and `module` at `ES Module` in `package.json`.
+另外说一下，`typescript` 的项目会发布 `.d.ts` 的文件，可以给 IDE 以及开发者提供便利。不过也可以自行编写类型定义文件。
 
 References:
 
