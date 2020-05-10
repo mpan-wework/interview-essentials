@@ -128,6 +128,9 @@ dp[i]，遍历已经已有括号总和为 `i-1` 的一对 `dp[m][x]` 和 `dp[i-1
 # #140 [Word Break II](https://leetcode.com/problems/word-break-ii)
 # #141 [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle)
 # #146 [LRU Cache](https://leetcode.com/problems/lru-cache)
+
+算法：维护一个双向链表 `l` 和 字典 `d`，新数据从 `l` 尾端插入，老数据从 `l` 头端淘汰，如果 `key` 在 `d` 中，把节点移动到 `l` 尾端
+
 # #148 [Sort List](https://leetcode.com/problems/sort-list)
 # #149 [Max Points on a Line](https://leetcode.com/problems/max-points-on-a-line)
 # #150 [Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation)
